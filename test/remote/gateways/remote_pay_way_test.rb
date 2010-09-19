@@ -12,8 +12,8 @@ class RemotePayWayTest < Test::Unit::TestCase
     }
     
     @gateway = ActiveMerchant::Billing::PayWayGateway.new(
-      :username => 'Q12678', 
-      :password => 'Ad6ht28zd', 
+      :username => '12341234', 
+      :password => 'abcdabcd', 
       :merchant => 'TEST', 
       :pem      => './payway.pem'
     )
@@ -181,13 +181,10 @@ class RemotePayWayTest < Test::Unit::TestCase
   
   def test_invalid_login
     gateway = ActiveMerchant::Billing::PayWayGateway.new(
-      :username => '',
+      :login    => '',
       :password => '',
-      :merchant => 'TEST',
-      :pem      => './payway.pem'
+      :merchant => 'TEST'
     )
-    
-    puts response.inspect
     
     assert response = gateway.purchase(@amount, @visa, @options)
     assert_failure response
