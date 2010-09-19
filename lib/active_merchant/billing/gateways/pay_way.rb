@@ -227,7 +227,7 @@ module ActiveMerchant
           msg     = "#{SUMMARY_CODES[params[:summary_code]]} - #{RESPONSE_CODES[params[:response_code]]}"
           
           success = params[:summary_code].to_s == "0"
-          options = { :text => @options[:merchant].to_s == "TEST" }
+          options = { :test => @options[:merchant].to_s == "TEST" }
           
           result = Response.new(success, msg, params, options)
         end
