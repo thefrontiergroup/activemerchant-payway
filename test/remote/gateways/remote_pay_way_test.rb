@@ -1,6 +1,10 @@
 require 'test/test_helper'
 require 'active_merchant/billing/gateways/pay_way'
 
+USERNAME = File.new('config/credentials.txt').readlines[0].gsub("\n",""))
+PASSWORD = File.new('config/credentials.txt').readlines[1].gsub("\n",""))
+PEM_FILE = 'config/payway.pem'
+
 class RemotePayWayTest < Test::Unit::TestCase
   
   def setup
@@ -12,10 +16,10 @@ class RemotePayWayTest < Test::Unit::TestCase
     }
     
     @gateway = ActiveMerchant::Billing::PayWayGateway.new(
-      :username => 'abcdefgh', 
-      :password => '12345678', 
+      :username => USERNAME, 
+      :password => PASSWORD, 
       :merchant => 'TEST', 
-      :pem      => './payway.pem'
+      :pem      => PEM_FILE
     )
     
     @visa = ActiveMerchant::Billing::CreditCard.new(
