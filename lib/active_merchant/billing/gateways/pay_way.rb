@@ -94,7 +94,7 @@ module ActiveMerchant
         @options[:eci]      ||= 'SSL'
         @options[:currency] ||= default_currency
         @options[:merchant] ||= 'TEST'
-        @options[:pem]        = File.read(options[:pem])
+        @options[:pem]        = File.read(File.join(Rails.root,options[:pem]))
         
         @post = {}
         @transaction = {}
