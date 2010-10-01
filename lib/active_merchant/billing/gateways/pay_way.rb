@@ -77,14 +77,12 @@ module ActiveMerchant
                         :credit         => 'refund'
                       }
       
-      class << self
-        supported_countries = [ 'AU' ]
-        supported_cardtypes = [ :visa, :master, :diners_club, :american_express, :bankcard ]
-        display_name        = 'Pay Way'
-        homepage_url        = 'http://www.payway.com.au'
-        default_currency    = 'AUD'
-        money_format        = :cents
-      end
+      self.supported_countries = [ 'AU' ]
+      self.supported_cardtypes = [ :visa, :master, :diners_club, :american_express, :bankcard ]
+      self.display_name        = 'Pay Way'
+      self.homepage_url        = 'http://www.payway.com.au'
+      self.default_currency    = 'AUD'
+      self.money_format        = :cents
       
       # Create a new Payway gateway.
       def initialize(options = {})
@@ -94,7 +92,7 @@ module ActiveMerchant
         @options[:eci]      ||= 'SSL'
         @options[:currency] ||= default_currency
         @options[:merchant] ||= 'TEST'
-        @options[:pem]        = File.read(File.join(Rails.root,options[:pem]))
+        @options[:pem]        = File.read(options[:pem])
         
         @post = {}
         @transaction = {}
@@ -200,7 +198,7 @@ module ActiveMerchant
             'customer.username'   => @options[:username],
             'customer.password'   => @options[:password],
             'customer.merchant'   => @options[:merchant],
-            'customer.orderNumber'=> @transaction[:order_number],
+            'customer.orderNumber'=> @transaction[:order_number]
           })
         end
         
@@ -215,8 +213,6 @@ module ActiveMerchant
         
         def process_response
           params = {}
-          
-          puts @request.inspect
           
           @response.split("&").each do |items|
             key, value = items.split("=")

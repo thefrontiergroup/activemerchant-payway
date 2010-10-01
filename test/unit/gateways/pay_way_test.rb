@@ -7,7 +7,7 @@ class PayWayTest < Test::Unit::TestCase
     @gateway = ActiveMerchant::Billing::PayWayGateway.new(
       :username => '12341234',
       :password => 'abcdabcd',
-      :pem      => 'payway.pem'
+      :pem      => 'config/payway.pem'
     )
     
     @amount = 1000

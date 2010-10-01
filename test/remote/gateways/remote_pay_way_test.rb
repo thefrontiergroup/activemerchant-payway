@@ -1,17 +1,17 @@
 require 'test/test_helper'
-require 'active_merchant/billing/gateways/pay_way'
+require 'activemerchant_pay_way'
 
-USERNAME = File.new('config/credentials.txt').readlines[0].gsub("\n",""))
-PASSWORD = File.new('config/credentials.txt').readlines[1].gsub("\n",""))
+USERNAME = File.new('config/credentials.txt').readlines[0].gsub("\n","")
+PASSWORD = File.new('config/credentials.txt').readlines[1].gsub("\n","")
 PEM_FILE = 'config/payway.pem'
 
 class RemotePayWayTest < Test::Unit::TestCase
   
   def setup
-    @amount   = 1000
+    @amount   = 1100
     
     @options  = {
-      :order_number           => 'abc',
+      :order_number           => (Time.now.to_f * 1000).round,
       :original_order_number  => 'xyz'
     }
     
@@ -38,7 +38,7 @@ class RemotePayWayTest < Test::Unit::TestCase
       :year               => 2020,
       :first_name         => 'Bob',
       :last_name          => 'Smith',
-      :verification_value => 070,
+      :verification_value => '070',
       :type               => 'master'
     )
     
@@ -82,7 +82,7 @@ class RemotePayWayTest < Test::Unit::TestCase
       :type               => 'visa'
     )
     
-    @stolen = ActiveMerchant::Billing::CreditCard.new(
+    @stolen_mastercard = ActiveMerchant::Billing::CreditCard.new(
       :number             => 5163200000000016,
       :month              => 12,
       :year               => 2019,
@@ -98,7 +98,7 @@ class RemotePayWayTest < Test::Unit::TestCase
       :year               => 2019,
       :first_name         => 'Bob',
       :last_name          => 'Smith',
-      :verification_value => 030,
+      :verification_value => '030',
       :type               => 'visa'
     )
     
@@ -112,7 +112,7 @@ class RemotePayWayTest < Test::Unit::TestCase
       :type               => 'american_express'
     )
     
-    @stolen = ActiveMerchant::Billing::CreditCard.new(
+    @stolen_diners = ActiveMerchant::Billing::CreditCard.new(
       :number             => 36430000000015,
       :month              => 8,
       :year               => 2021,
@@ -126,61 +126,69 @@ class RemotePayWayTest < Test::Unit::TestCase
   def test_successful_visa
     assert response = @gateway.purchase(@amount, @visa, @options)
     assert_success response
-    assert_equal 'Approved - Completed Successfully', response.message
+    assert_response_message_prefix 'Approved', response
   end
   
   def test_successful_mastercard
     assert response = @gateway.purchase(@amount, @mastercard, @options)
-    assert_failure response
-    assert_equal 'Approved - Completed Successfully', response.message
+    assert_success response
+    assert_response_message_prefix 'Approved', response
   end
   
-  def test_successful_amex
-    assert response = @gateway.purchase(@amount, @amex, @options)
-    assert_failure response
-    assert_equal 'Approved - Completed Successfully', response.message
+  if ENV['PAYWAY_TEST_AMEX'].present?
+    def test_successful_amex
+      assert response = @gateway.purchase(@amount, @amex, @options)
+      assert_success response
+      assert_response_message_prefix 'Approved', response
+    end
   end
   
-  def test_successful_diners
-    assert response = @gateway.purchase(@amount, @diners, @options)
-    assert_failure response
-    assert_equal 'Approved - Completed Successfully', response.message
+  if ENV['PAYWAY_TEST_DINERS'].present?
+    def test_successful_diners
+      assert response = @gateway.purchase(@amount, @diners, @options)
+      assert_success response
+      assert_response_message_prefix 'Approved', response
+    end
   end
   
   def test_expired_visa
     assert response = @gateway.purchase(@amount, @expired, @options)
     assert_failure response
-    assert_equal 'Rejected - Expired card', response.message
+    assert_equal 'Declined - Expired card', response.message
   end
   
   def test_low_visa
     assert response = @gateway.purchase(@amount, @low, @options)
     assert_failure response
-    assert_equal 'Rejected - Not sufficient funds', response.message
+    assert_equal 'Declined - Not sufficient funds', response.message
   end
   
   def test_stolen_mastercard
-    assert response = @gateway.purchase(@amount, @stolen, @options)
+    assert response = @gateway.purchase(@amount, @stolen_mastercard, @options)
     assert_failure response
-    assert_equal 'Rejected - Stolen card', response.message
+    assert_equal 'Declined - Pick-up card', response.message
   end
   
   def test_invalid_visa
-    assert response = @gateway.purchase(@amount, @stolen, @options)
+    assert response = @gateway.purchase(@amount, @invalid, @options)
     assert_failure response
-    assert_equal 'Rejected - Invalid Credit Card Verification Number', response.message
+    assert_equal 'Declined - Do not honour', response.message
+  end
+
+  if ENV['PAYWAY_TEST_AMEX'].present?
+    def test_restricted_amex
+      assert response = @gateway.purchase(@amount, @restricted, @options)
+      assert_failure response
+      assert_equal 'Rejected - Restricted card', response.message
+    end
   end
   
-  def test_restricted_amex
-    assert response = @gateway.purchase(@amount, @restricted, @options)
-    assert_failure response
-    assert_equal 'Rejected - Restricted card', response.message
-  end
-  
-  def test_stolen_diners
-    assert response = @gateway.purchase(@amount, @stolen, @options)
-    assert_failure response
-    assert_equal 'Rejected - Stolen card', response.message
+  if ENV['PAYWAY_TEST_DINERS'].present?
+    def test_stolen_diners
+      assert response = @gateway.purchase(@amount, @stolen_diners, @options)
+      assert_failure response
+      assert_equal 'Declined - Pick-up card', response.message
+    end
   end
   
   def test_invalid_login
@@ -188,14 +196,17 @@ class RemotePayWayTest < Test::Unit::TestCase
       :username => '',
       :password => '',
       :merchant => 'TEST',
-      :pem      => './payway.pem'
+      :pem      => PEM_FILE
     )
-    
-    puts response.inspect
-    
     assert response = gateway.purchase(@amount, @visa, @options)
     assert_failure response
-    assert_equal 'Erred - Invalid merchant', response.message
+    assert_equal 'Rejected - Unknown Customer Username or Password', response.message
+  end
+  
+  protected
+  
+  def assert_response_message_prefix(prefix, response)
+    assert_equal prefix, response.message.split(' - ', 2).first
   end
   
 end

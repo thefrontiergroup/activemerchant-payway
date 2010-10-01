@@ -30,3 +30,12 @@
     }
     
     gateway.purchase(amount, card, options)
+    
+# Note When Testing
+
+Since the merchant has to enable Diners and Amex on the Payway side,
+To run the tests for these two cards simply run with the `PAYWAY_TEST_DINERS` and
+`PAYWAY_TEST_AMEX` environment variables.
+
+You also need to fill out `credentials.txt` and `payway.pem` in the config directory
+with your api login and certificate generated at [http://www.payway.com.au](http://www.payway.com.au)
