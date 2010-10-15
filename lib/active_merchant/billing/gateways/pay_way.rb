@@ -198,7 +198,7 @@ module ActiveMerchant
             'customer.username'   => @options[:username],
             'customer.password'   => @options[:password],
             'customer.merchant'   => @options[:merchant],
-            'customer.orderNumber'=> @transaction[:order_number]
+            'customer.orderNumber'=> "#{@transaction[:order_number]} - #{Time.new.to_i.to_s}",
           })
         end
         
