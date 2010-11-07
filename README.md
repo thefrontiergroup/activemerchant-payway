@@ -39,3 +39,9 @@ To run the tests for these two cards simply run with the `PAYWAY_TEST_DINERS` an
 
 You also need to fill out `credentials.txt` and `payway.pem` in the config directory
 with your api login and certificate generated at [http://www.payway.com.au](http://www.payway.com.au)
+
+## Contributors
+
+Developed by [@dangalipo](http://twitter.com/dangalipo) and [@mlambie](http://twitter.com/mlambie), sponsored by [@frontiergroup](http://twitter.com/frontiergroup]
+
+Released by [@dirkkelly](http://twitter.com/dirkkelly) so all of you can use it. 
