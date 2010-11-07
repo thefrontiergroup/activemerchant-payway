@@ -42,6 +42,6 @@ with your api login and certificate generated at [http://www.payway.com.au](http
 
 ## Contributors
 
-Developed by [@dangalipo](http://twitter.com/dangalipo) and [@mlambie](http://twitter.com/mlambie), sponsored by [@frontiergroup](http://twitter.com/frontiergroup]
+Developed by [@dangalipo](http://twitter.com/dangalipo) and [@mlambie](http://twitter.com/mlambie), sponsored by [@frontiergroup](http://twitter.com/frontiergroup)
 
 Released by [@dirkkelly](http://twitter.com/dirkkelly) so all of you can use it. 
