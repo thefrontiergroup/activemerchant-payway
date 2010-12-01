@@ -19,6 +19,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{ActiveMerchant PayWay Plugin}
   gem.email = "dk@dirkkelly.com"
   gem.authors = ["Matt Lambie", "Dan Galipo", "Dirk Kelly"]
+  gem.add_dependency 'activemerchant', '>= 1.9.1'
 end
 Jeweler::RubygemsDotOrgTasks.new
 
