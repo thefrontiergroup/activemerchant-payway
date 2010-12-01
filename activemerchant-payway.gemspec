@@ -19,11 +19,12 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "activemerchant-payway.gemspec",
     "config/credentials.txt",
     "config/payway.pem",
     "init.rb",
     "lib/active_merchant/billing/gateways/pay_way.rb",
-    "lib/activemerchant_pay_way.rb",
+    "lib/activemerchant-payway.rb",
     "test/remote/gateways/remote_pay_way_test.rb",
     "test/test_helper.rb",
     "test/unit/gateways/pay_way_test.rb"
