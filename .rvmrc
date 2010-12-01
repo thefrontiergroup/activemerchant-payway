@@ -1,2 +1,0 @@
-rvm use @active_merchant-pay_way --create
-rvm-prompt i v p g

@@ -1,2 +1,1 @@
-require 'active_merchant'
-require 'active_merchant/billing/gateways/pay_way'
+require 'activemerchant_pay_way'
