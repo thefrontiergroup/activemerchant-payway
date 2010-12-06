@@ -40,7 +40,7 @@ module ActiveMerchant
                         'Q3' => 'Payment Gateway Connection Error',
                         'Q4' => 'Payment Gateway Unavailable',
                         'Q5' => 'Invalid Transaction',
-                        'Q6' => 'Duplicate Transaction – requery to determine status',
+                        'Q6' => 'Duplicate Transaction - requery to determine status',
                         'QA' => 'Invalid parameters or Initialisation failed',
                         'QB' => 'Order type not currently supported',
                         'QC' => 'Invalid Order Type',
