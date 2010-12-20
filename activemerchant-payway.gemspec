@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{activemerchant-payway}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Matt Lambie", "Dan Galipo", "Dirk Kelly"]
-  s.date = %q{2010-12-01}
+  s.date = %q{2010-12-20}
   s.description = %q{ActiveMerchant PayWay Plugin}
   s.email = %q{dk@dirkkelly.com}
   s.extra_rdoc_files = [
