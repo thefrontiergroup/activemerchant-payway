@@ -204,8 +204,8 @@ module ActiveMerchant
         
         # Creates the request and returns the sumarised result
         def send_post
-          @request = URI.encode(@post.map {|k,v| "#{k}=#{v}"}.join('&'))
-          
+          @request = @post.map { |k, v| "#{k}=#{CGI.escape(v.to_s)}" }.join("&")
+
           @response = ssl_post(URL, @request)
           
           result = process_response
@@ -213,11 +213,10 @@ module ActiveMerchant
         
         def process_response
           params = {}
-          
-          @response.split("&").each do |items|
-            key, value = items.split("=")
-            key = key.split('.')[1]
-            params[key.underscore.to_sym] = value
+
+          CGI.parse(@response).each_pair do |key, value|
+            actual_key = key.split(".")[1]
+            params[actual_key.underscore.to_sym] = value[0]
           end
           
           msg     = "#{SUMMARY_CODES[params[:summary_code]]} - #{RESPONSE_CODES[params[:response_code]]}"
