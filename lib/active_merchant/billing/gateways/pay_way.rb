@@ -215,7 +215,7 @@ module ActiveMerchant
           params = {}
 
           CGI.parse(@response).each_pair do |key, value|
-            actual_key = key.split(".")[1]
+            actual_key = key.split(".").last
             params[actual_key.underscore.to_sym] = value[0]
           end
           
